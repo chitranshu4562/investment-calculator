@@ -1,0 +1,10 @@
+.image {
+    max-width: 15%;
+    height: auto;
+    border-radius: 50%;
+}
+.title {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+}
