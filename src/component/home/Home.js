@@ -2,25 +2,30 @@ import styles from './Home.module.css';
 import Form from "../form/Form";
 import List from "../list/List";
 import logo from '../../assets/money_investment.jpg'
+import {useState} from "react";
 
 const Home = () => {
-    const investmentDataHandler = (data) => {
-        console.log('Investment data: ', data);
-        const amount = parseInt(data.monthlyInvestment);
-        const rate = parseInt(data.returnRate);
-        const duration = parseInt(data.timePeriod);
+    const [userInput, setUserInput] = useState(null);
+    const investmentDataHandler = (userInput) => {
+        console.log('Investment data: ', userInput);
+        setUserInput(userInput);
+    }
+    const resultData = [];
+    if (userInput) {
+        const amount = userInput['yearlyInvestment'];
+        const rate = userInput['returnRate'];
+        const duration = userInput['timePeriod'];
 
-        let resultData = [];
+        let principalAmount = amount;
         let totalInterest = 0;
-        let principleAmount = amount;
         for (let i=1; i<=duration; i++) {
-            const interest = Math.round((principleAmount * rate) / 100);
+            const interest = (principalAmount * rate) / 100;
             totalInterest += interest;
-            principleAmount += interest;
+            principalAmount += interest;
             resultData.push({
                 year: i,
-                totalPrincipalAmount: principleAmount,
-                currentYearInterest: interest,
+                totalPrincipalAmount: principalAmount,
+                yearlyInterest: interest,
                 totalInterest: totalInterest,
                 totalInvestedCapital: (amount * i)
             })
@@ -37,7 +42,9 @@ const Home = () => {
                 <div className={styles.title + ` text-center`}>Investment Calculator</div>
             </div>
             <Form onSubmitForm={investmentDataHandler}/>
-            <List/>
+            {!userInput &&
+                <h2 className="d-flex justify-content-center align-items-center mt-2 text-light">No investment calculated yet.</h2>}
+            {userInput && <List data={resultData}/>}
         </div>
     )
 }

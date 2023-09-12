@@ -1,53 +1,32 @@
 import styles from './List.module.css';
-
-const List = () => {
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+})
+const List = (props) => {
     return (
         <table className="mt-3">
             <thead>
             <tr>
                 <th>Year</th>
                 <th>Total Principal Amount</th>
-                <th>Interest(this year)</th>
+                <th>Yearly Interest</th>
                 <th>Total Interest</th>
                 <th>Total Invested Capital</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>1000</td>
-                <td>100</td>
-                <td>100</td>
-                <td>500</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>2000</td>
-                <td>200</td>
-                <td>200</td>
-                <td>600</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>3000</td>
-                <td>300</td>
-                <td>300</td>
-                <td>700</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>4000</td>
-                <td>400</td>
-                <td>400</td>
-                <td>800</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>5000</td>
-                <td>500</td>
-                <td>500</td>
-                <td>900</td>
-            </tr>
+            {props.data.map(yearlyData => (
+                <tr key={yearlyData.year}>
+                    <td>{yearlyData.year}</td>
+                    <td>{formatter.format(yearlyData.totalPrincipalAmount)}</td>
+                    <td>{formatter.format(yearlyData.yearlyInterest)}</td>
+                    <td>{formatter.format(yearlyData.totalInterest)}</td>
+                    <td>{formatter.format(yearlyData.totalInvestedCapital)}</td>
+                </tr>
+            ))}
             </tbody>
         </table>
     )

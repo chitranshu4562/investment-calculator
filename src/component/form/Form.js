@@ -1,62 +1,56 @@
 import styles from './Form.module.css';
 import {useState} from "react";
 
+const initialData = {
+    yearlyInvestment: 10000,
+    returnRate: 10,
+    timePeriod: 5
+}
 const Form = (props) => {
-    const [monthlyInvestment, setMonthlyInvestment] = useState('');
-    const [returnRate, setReturnRate] = useState('');
-    const [timePeriod, setTimePeriod] = useState('');
+    const [investmentData, setInvestmentData] = useState(initialData);
 
     const inputChangeHandler = (identifier, value) => {
-        if (identifier === 'MONTHLY_INVESTMENT') {
-            setMonthlyInvestment(value);
-        } else if (identifier === 'RETURN_RATE') {
-            setReturnRate(value);
-        } else {
-            setTimePeriod(value);
-        }
+        setInvestmentData(prevState => {
+            return {
+                ...prevState,
+                [identifier]: value
+            }
+        })
     }
 
     const submitHandler = (event) => {
         event.preventDefault();
-        const investmentData = {
-            monthlyInvestment: monthlyInvestment,
-            returnRate: returnRate,
-            timePeriod: timePeriod
-        }
         props.onSubmitForm(investmentData);
-        setMonthlyInvestment('');
-        setReturnRate('');
-        setTimePeriod('');
     }
 
     const resetHandler = () => {
-        console.log('reset button is clicked');
+        setInvestmentData(initialData);
     }
     return (
         <div className={styles.formContainer}>
             <form style={{padding: 5}} onSubmit={submitHandler}>
                 <div className="row gy-3">
                     <div className="form-group col-sm-6">
-                        <label>Monthly Investment ($)</label>
-                        <input type="text" name="MONTHLY_INVESTMENT" value={monthlyInvestment}
+                        <label>Yearly Investment ($)</label>
+                        <input type="number" value={investmentData['yearlyInvestment']}
                                placeholder="Enter your amount" className="form-control" onChange={(event) => {
-                            inputChangeHandler(event.target.name, event.target.value);
+                            inputChangeHandler('yearlyInvestment', event.target.value);
                         }}/>
                     </div>
 
                     <div className="form-group col-sm-6">
                         <label>Expected Return Rate (% per year)</label>
-                        <input type="text" name="RETURN_RATE" value={returnRate}
+                        <input type="number" value={investmentData['returnRate']}
                                placeholder="Enter Return Rate" className="form-control" onChange={(event) => {
-                            inputChangeHandler(event.target.name, event.target.value)
+                            inputChangeHandler('returnRate', event.target.value)
                         }}/>
                     </div>
 
                     <div className="form-group col-sm-6">
                         <label>Investment Time Period (years)</label>
-                        <input type="text" name="TIME_PERIOD" value={timePeriod} placeholder="Enter no. of years"
+                        <input type="number" value={investmentData['timePeriod']} placeholder="Enter no. of years"
                                className="form-control" onChange={(event) => {
-                            inputChangeHandler(event.target.name, event.target.value)
+                            inputChangeHandler('timePeriod', event.target.value)
                         }}/>
                     </div>
                     <div className="col-sm-6 d-flex justify-content-center align-items-center">
